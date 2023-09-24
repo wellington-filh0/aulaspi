@@ -18,7 +18,7 @@ public class EventosController {
 
 	@RequestMapping("/eventos/form")
 	public String form() {
-		return "formEvento";
+		return "eventos/formEvento";
 	}
 
 	@PostMapping("/submit")
@@ -36,7 +36,7 @@ public class EventosController {
 	
 	@GetMapping("/success")
 	public String successPage() {
-		return "success";
+		return "eventos/success";
 	}
 
 }
