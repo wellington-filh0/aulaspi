@@ -136,8 +136,7 @@ public class EventosController {
 		md.addObject("convidados", cr.findByEvento(evento));		
 		return md;
 	}
-	
-	
+		
 	@GetMapping("/eventos/{id}/remover")
 	public String apagarEvento(@PathVariable Long id) {
 		
@@ -154,6 +153,19 @@ public class EventosController {
 		}
 		
 		return "redirect:/";
+	}
+	
+	@GetMapping("/eventos/{idEvento}/convidados/{idConvidado}/remover")
+	public String apagarConvidado(@PathVariable Long idConvidado) {
+		
+		Optional<Convidado> optConvidado = cr.findById(idConvidado);
+		
+		if(!optConvidado.isEmpty()) {
+			
+			cr.deleteById(idConvidado);			
+		}
+		
+		return "redirect:/submit/{idEvento}";
 	}
 
 }
