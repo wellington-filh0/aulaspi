@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import ifrn.pi.eventos.models.Convidado;
 import ifrn.pi.eventos.models.Evento;
 import ifrn.pi.eventos.repositories.ConvidadoRepository;
 import ifrn.pi.eventos.repositories.EventoRepository;
+import jakarta.validation.Valid;
 
 @Controller
 
@@ -30,7 +32,11 @@ public class EventosController {
 	}
 
 	@PostMapping("/submit")
-	public String salvar(Evento evento) {
+	public String salvar(@Valid Evento evento, BindingResult result) {
+		
+		if (result.hasErrors()) {
+			return form(evento);
+		}
 		System.out.println("Dados do evento:");
 		System.out.println("Nome: " + evento.getNome());
 		System.out.println("Local: " + evento.getLocal());
@@ -76,7 +82,11 @@ public class EventosController {
 	}
 	
 	@PostMapping("/submit/{idEvento}")
-	public String salvarConvidado(@PathVariable Long idEvento, Convidado convidado) {
+	public String salvarConvidado(@PathVariable Long idEvento, @Valid Convidado convidado, BindingResult resulta) {
+		
+		if (resulta.hasErrors()) {
+			return "redirect:/submit/{idEvento}";
+		}
 		
 		System.out.println("Id do evento: " + idEvento);
 		System.out.println(convidado);

@@ -38,15 +38,17 @@
 				<div class="card">
 					<div class="card-content">
 						<span class="card-title">Adicionar Convidado:</span>
-						<form th:action="@{/submit/{idEvento}(idEvento=${evento.id})}" method="post">
+						<form th:action="@{/submit/{idEvento}(idEvento=${evento.id})}" method="post" th:object="${convidado}">
 							<div>
-								<input type="hidden" name="id" th:value="${convidado.id}" readonly="readonly">
+								<input type="hidden" th:field="*{id}" readonly="readonly"> <p th:errors="*{id}"></p>
 							</div>
 							<div>
-								<label>Nome: </label> <input type="text" name="nome" th:value="${convidado.nome}">
+								<label>Nome: </label> 
+								<input type="text" th:field="*{nome}"> <p th:errors="*{nome}"></p>
 							</div>
 							<div>
-								<label>RG: </label> <input type="text" name="rg" th:value="${convidado.rg}">
+								<label>RG: </label> 
+								<input type="text" th:field="*{rg}"> <p th:errors="*{rg}"></p>
 							</div>
 							<div>
 								<button type="submit" class="btn">Salvar</button>
