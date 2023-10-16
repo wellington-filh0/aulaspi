@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ifrn.pi.eventos.models.Convidado;
 import ifrn.pi.eventos.models.Evento;
@@ -32,7 +33,7 @@ public class EventosController {
 	}
 
 	@PostMapping("/submit")
-	public String salvar(@Valid Evento evento, BindingResult result) {
+	public String salvar(@Valid Evento evento, BindingResult result, RedirectAttributes attributes) {
 		
 		if (result.hasErrors()) {
 			return form(evento);
@@ -44,8 +45,9 @@ public class EventosController {
 		System.out.println("Horário: " + evento.getHorario());
 
 		er.save(evento);
+		attributes.addFlashAttribute("mensagem", "Evento salvo com sucesso!");
 
-		return "redirect:/"; //PQ SÓ DEU CERTO COLOCANDO APENAS A BARRA?
+		return "redirect:/submit";
 	}
 
 	@GetMapping("/success")
@@ -82,9 +84,9 @@ public class EventosController {
 	}
 	
 	@PostMapping("/submit/{idEvento}")
-	public String salvarConvidado(@PathVariable Long idEvento, @Valid Convidado convidado, BindingResult resulta) {
+	public String salvarConvidado(@PathVariable Long idEvento, @Valid Convidado convidado, BindingResult resulta, RedirectAttributes attributes) {
 		
-		if (resulta.hasErrors()) {
+		if (resulta.hasErrors()) {                      // CONCERTAR: NÃO ESTÁ APARECENDO A FRASE QUANDO DEIXA RG OU NOME VAZIO!!
 			return "redirect:/submit/{idEvento}";
 		}
 		
@@ -100,6 +102,7 @@ public class EventosController {
 		convidado.setEvento(evento);
 		
 		cr.save(convidado);
+		attributes.addFlashAttribute("mensagemConvidado", "Convidado salvo com sucesso!");
 		
 		return "redirect:/submit/{idEvento}";
 	}
@@ -148,7 +151,7 @@ public class EventosController {
 	}
 		
 	@GetMapping("/eventos/{id}/remover")
-	public String apagarEvento(@PathVariable Long id) {
+	public String apagarEvento(@PathVariable Long id, RedirectAttributes attributes) {
 		
 		Optional<Evento> opt = er.findById(id);
 		
@@ -159,20 +162,21 @@ public class EventosController {
 			
 			cr.deleteAll(convidados);			
 			er.delete(evento);
-			
+			attributes.addFlashAttribute("mensagem", "Evento removido com sucesso!");
 		}
 		
-		return "redirect:/";
+		return "redirect:/submit";
 	}
 	
 	@GetMapping("/eventos/{idEvento}/convidados/{idConvidado}/remover")
-	public String apagarConvidado(@PathVariable Long idConvidado) {
+	public String apagarConvidado(@PathVariable Long idConvidado, RedirectAttributes attributes) {
 		
 		Optional<Convidado> optConvidado = cr.findById(idConvidado);
 		
 		if(!optConvidado.isEmpty()) {
 			
-			cr.deleteById(idConvidado);			
+			cr.deleteById(idConvidado);	
+			attributes.addFlashAttribute("mensagemConvidado", "Convidado removido com sucesso!");
 		}
 		
 		return "redirect:/submit/{idEvento}";
