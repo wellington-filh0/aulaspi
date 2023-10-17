@@ -37,7 +37,7 @@
 				<td th:text="${e.id}">1</td>
 				<td><a th:href="@{/submit/{id}(id=${e.id})}"><span th:text="${e.nome}">Aniversário de João</span></a></td>
 				<td th:text="${e.local}">Clube</td>
-				<td th:text="${e.data}">25/02/2021</td>
+				<td th:text="${e.data}">25/02/2021</td> <!---NÃO CONSEGUI FAZER FORMATAÇÃO DA HORA!!!-->
 				<td th:text="${e.horario}">19:00</td>
 				<td>
 					<a th:href="@{/eventos/{id}/selecionar(id=${e.id})}"><i class="material-icons">edit</i></a>
